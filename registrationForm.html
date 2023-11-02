@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        /* Add CSS styling for the magnifier */
+        .magnifier {
+            width: 150px; /* Set the width of the magnifier */
+            height: 150px; /* Set the height of the magnifier */
+            position: absolute;
+            border: 1px solid #ccc;
+            background: #f4f4f4;
+            pointer-events: none; /* Prevent the magnifier from blocking mouse events */
+        }
+
+        /* Style the product image container */
+        .rounded-4 {
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+    <div class="rounded-4 mb-3 d-flex justify-content-center first" id="first">
+        <a data-fslightbox="mygallery" class="rounded-4" data-type="image" href="#">
+            <img id="largeImage" style="width: 300px; height: 300px; margin: auto;" class="rounded-4 fit" src="images/slider-bg.jpg" />
+        </a>
+    </div>
+    <div id="second" class="magnifier"></div>
+
+    <script>
+        // JavaScript to add the magnifier effect
+        const largeImage = document.getElementById("largeImage");
+        const lens = document.getElementById("second");
+        const ratio = 3; // Adjust this value to control the level of zoom.
+
+        largeImage.addEventListener("mousemove", function (e) {
+            const bounds = this.getBoundingClientRect();
+            const x = e.clientX - bounds.left;
+            const y = e.clientY - bounds.top;
+
+            const xPercent = (x / bounds.width) * 100;
+            const yPercent = (y / bounds.height) * 100;
+
+            lens.style.width = largeImage.width * ratio + "px";
+            lens.style.height = largeImage.height * ratio + "px";
+
+            lens.style.backgroundImage = "url('" + largeImage.src + "')";
+            lens.style.backgroundSize = (largeImage.width * ratio) + "px " + (largeImage.height * ratio) + "px";
+            lens.style.backgroundPosition = "-" + xPercent * ratio + "% -" + yPercent * ratio + "%";
+
+            lens.style.left = x - (lens.offsetWidth / 2) + "px";
+            lens.style.top = y - (lens.offsetHeight / 2) + "px";
+
+            lens.style.display = "block";
+        });
+
+        largeImage.addEventListener("mouseleave", function () {
+            lens.style.display = "none";
+        });
+    </script>
+</body>
+</html>
